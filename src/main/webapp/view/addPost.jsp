@@ -25,9 +25,9 @@
     <input type="text" name="description" placeholder="Describe your offer" id="description">
     <label for="description"></label>
 
-    <input type="number" name="price" placeholder="set price" id="price">
+    <input type="number" name="price" placeholder="set hour rate" id="price" maxlength="3">
     <label for="price"></label>
-    <input type="submit" value="edit">
+    <input type="submit" value="add">
 
 
 </form>

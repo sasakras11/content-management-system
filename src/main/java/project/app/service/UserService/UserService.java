@@ -10,8 +10,7 @@ public interface UserService {
     void add(User user);
     void delete(User user);
     void edit(User user);
-    User createUser(String name,String pass);
-    boolean validation(User user);
+    boolean validation(String name,String pass);
     User getById(int id);
     User getByName(String name);
     boolean isNameFree(String name);

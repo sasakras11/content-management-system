@@ -27,6 +27,8 @@ public class AppContext {
         this.environment = environment;
     }
 
+
+
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));

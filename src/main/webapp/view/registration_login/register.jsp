@@ -16,11 +16,26 @@
 <body>
 
 
+<c:url value="/registration" var="var"/>
 
-<form action="/registration" method="POST">
-    <input type="text" name="name"/>
-    <input type="text" name="pass"/>
-    <input type="submit" value="Sign Up">
+<form action="${var}" method="POST">
+
+    <input type="hidden" name="id" value="${user.id}">
+
+    <input type="text" name="name" id="name" placeholder="username">
+    <label for="name"></label>
+
+    <input type="text" name="pass" placeholder="password" id="pass">
+    <label for="pass"></label>
+
+    <input type="text" name="email" placeholder="email" id="email">
+    <label for="number"></label>
+
+    <input type="int" name="number" placeholder="number" id="number">
+    <label for="number"></label>
+    <input type="submit" value="sign up">
+
+
 </form>
 <c:if test ="${isNameFree!=null}">
     <p>name is not free</p>

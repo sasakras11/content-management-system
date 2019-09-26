@@ -9,4 +9,5 @@ public interface postService {
     void addPost(post post);
     void editPost(post post);
     void deletePost(post post);
+    post getById(int id);
 }

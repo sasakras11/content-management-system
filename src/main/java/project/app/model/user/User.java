@@ -18,8 +18,31 @@ public class User  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid")
     private int id;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "number")
+    private int number;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "email")
+      private String email;
 
     @Column(name = "pass")
     private String pass;

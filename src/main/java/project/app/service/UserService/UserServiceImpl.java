@@ -44,21 +44,11 @@ public class UserServiceImpl implements UserService {
             userDao.edit(user);
     }
 
-    @Override
-    @Transactional
-    public User createUser(String name, String pass) {
-
-        User user = new User();
-        user.setPass(pass);
-        user.setName(name);
-
-        return user;
-    }
 
     @Override
     @Transactional
-    public boolean validation(User user) {
-        return userDao.validation(user);
+    public boolean validation(String name,String pass) {
+        return userDao.validation(name,pass);
     }
 
     @Override

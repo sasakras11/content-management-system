@@ -52,11 +52,11 @@ session.save(user);
     }
     @Override
     @Transactional
-    public boolean validation(User user) {         //VALIDATION
+    public boolean validation(String name,String pass) {         //VALIDATION
         Session session = sessionFactory.getCurrentSession();
 Query query = session.createQuery("from User where name=:NameParam AND pass=:PassParam");
-query.setParameter("NameParam",user.getName());
-query.setParameter("PassParam",user.getPass());
+query.setParameter("NameParam",name);
+query.setParameter("PassParam",pass);
 
 int f  = query.list().size();
         return f==1;

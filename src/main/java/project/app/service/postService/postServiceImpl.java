@@ -42,4 +42,9 @@ postDao.editPost(post);
     public void deletePost(post post) {
         postDao.deletePost(post);
     }
+
+    @Override
+    public post getById(int id) {
+        return postDao.getById(id);
+    }
 }

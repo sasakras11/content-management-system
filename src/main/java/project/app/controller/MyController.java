@@ -41,6 +41,7 @@ return new ModelAndView("registration_login/confirm");
     public ModelAndView  registerPage(){
 
                       ModelAndView m = new ModelAndView();
+                      m.addObject("user",new User());
                       m.setViewName("registration_login/register");
 
 
@@ -48,17 +49,17 @@ return new ModelAndView("registration_login/confirm");
 
     }
 
-    @RequestMapping(value = "/registration",method =  RequestMethod.POST)              //ТУТ МИ СТВОРЮЄМО НОВОГО ЮЗЕРА І ДОБАВЛЯЄМО ЙОГО В БД +
-                                                                                // ВИВОДИМО НА СТОРІНКУ ПОСТИ
-            public ModelAndView Registration(@RequestParam String name,@RequestParam String pass){
+    @RequestMapping(value = "/registration",method =  RequestMethod.POST)              //creating new user and adding to database
+                                                                                //
+            public ModelAndView Registration(@ModelAttribute User user){
 
 
         ModelAndView m = new ModelAndView("list");
-        if(userService.isNameFree(name)){
-     userService.add(userService.createUser(name,pass));
-     m.addObject("user", userService.getByName(name));                                         //adding object name,by which i will checking
-                                                                                    // and editing user and allow him to edit his posts
-     m.addObject("list", postService.postList());
+        if(userService.isNameFree(user.getName())){
+            userService.add(user);
+     m.addObject("user", userService.getByName(user.getName()));                                         //adding object name,by which i will checking
+                                                                                        // and editing user and allow him to edit his posts
+            m.addObject("list", postService.postList());
      return m;}
         else{
             m.setViewName("registration_login/register");
@@ -69,25 +70,26 @@ return new ModelAndView("registration_login/confirm");
 
     @RequestMapping(value = "/confirm",method =  RequestMethod.GET)
    public ModelAndView Logging(@RequestParam String name,@RequestParam String pass){
-                                                                                           //ТУТ МИ ЛОГІНИМО ЮЗЕРА І
-                                                                                        //ВИВОДИМО НА СТОРІНКУ ПОСТИ
+                                                                                           //user login
+                                                                                        //if name+pass right
         ModelAndView mv = new ModelAndView();
-        if(userService.validation(userService.createUser(name,pass))){
+        if(userService.validation(name,pass)){
             mv.setViewName("list");
+            mv.addObject("user", userService.getByName(name));
+
+            mv.addObject("list", postService.postList());
         }
         else {
-            mv.setViewName("registration_login/confirm");
+            mv.setViewName("registration_login/confirm");                               //else return login page
             return mv;
         }
-        mv.addObject("user", userService.getByName(name));                        //adding object name,by which i will checking
-                                                                             // and editing user and allow him to edit his posts
-        mv.addObject("list", postService.postList());
+
  return  mv;
     }
     @RequestMapping(value = "/settings/{user.id}",method = RequestMethod.GET)
       public ModelAndView EditPage(@PathVariable("user.id") int  id){
 
-          ModelAndView mv = new ModelAndView();
+          ModelAndView mv = new ModelAndView();                                        //catching settings request and giving settings page
           mv.setViewName("settings");
 mv.addObject("user", userService.getById(id));
 
@@ -95,9 +97,9 @@ return mv;
     }
 
 
-    @RequestMapping(value = "/settings",method = RequestMethod.POST)        //here we edit user trying by transfer hom like object,was tr
-    public ModelAndView Edit(@ModelAttribute User user) {               //by name pass and id but now by object
-        ModelAndView m = new ModelAndView();
+    @RequestMapping(value = "/settings",method = RequestMethod.POST)        //editing user
+    public ModelAndView Edit(@ModelAttribute User user) {               //if name is free,editing name and pass in database and return list.jsp
+        ModelAndView m = new ModelAndView();                                 //else return same page and allow him to make another name
         if (userService.isNameFree(user.getName())) {
             userService.edit(user);
             m.addObject("list", postService.postList());
@@ -112,7 +114,7 @@ return mv;
 
         return m;
     }
-    @RequestMapping(value = "/addPost/{id}")
+    @RequestMapping(value = "/addPost/{id}")                   //catching requests and returning postAdd page
     public ModelAndView addPost(@PathVariable("id")int id){
 
     ModelAndView mv = new ModelAndView();
@@ -121,7 +123,7 @@ return mv;
     return mv;
     }
 
-    @RequestMapping(value = "/addPost",method = RequestMethod.POST)
+    @RequestMapping(value = "/addPost",method = RequestMethod.POST)              //confirm post and return list.jsp
     public ModelAndView addPost(@ModelAttribute post post,@RequestParam int id_user ){
     ModelAndView mv = new ModelAndView();
 
@@ -135,6 +137,38 @@ return mv;
         return mv;
 
     }
+
+    @RequestMapping(value = "/editPost/{id}")
+    public ModelAndView editPost(@PathVariable int id){
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("post",postService.getById(id));
+    mv.addObject("user",postService.getById(id).getUser());
+    mv.setViewName("editPost");
+    return mv;
+    }
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.POST)
+    public ModelAndView edit(@ModelAttribute post post,@PathVariable int id){
+        ModelAndView mv = new ModelAndView();
+        post.setUser(userService.getById(id));
+        postService.editPost(post);
+        mv.addObject("user",post.getUser());
+        mv.addObject("list",postService.postList());
+        mv.setViewName("list");
+        return mv;
+    }
+    @RequestMapping(value = "/deletePost/{id}")
+    public ModelAndView deletePost(@PathVariable int id){
+    ModelAndView mv = new ModelAndView();
+        mv.setViewName("list");
+    mv.addObject("user",postService.getById(id).getUser());
+        postService.deletePost(postService.getById(id));
+        mv.addObject("list",postService.postList());
+
+
+        return mv;
+
+    }
+
 
 
 }

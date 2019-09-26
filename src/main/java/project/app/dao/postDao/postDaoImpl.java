@@ -47,4 +47,11 @@ public class postDaoImpl implements PostDao {
 Session session = sessionFactory.getCurrentSession();
 session.delete(post);
     }
+
+    @Override
+    @Transactional
+    public post getById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(post.class,id);
+    }
 }
